@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 对话 iframe 嵌入示例</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: #f6f7f4;
+      color: #20251f;
+      font-family: "Aptos", "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    .embed-shell {
+      width: min(570px, 100vw);
+      height: min(900px, calc(100vh - 48px));
+      border-radius: 20px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 24px 70px rgba(35, 39, 35, 0.16);
+      transition: width 0.24s ease, height 0.24s ease, border-radius 0.24s ease, box-shadow 0.24s ease;
+    }
+
+    .embed-shell.is-fullscreen {
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .embed-shell.is-hidden {
+      display: none;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border: 0;
+      background: transparent;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 0;
+      }
+
+      .embed-shell {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="embed-shell">
+    <iframe
+      src="http://localhost:5173/embedChatView?origin=hgczy&userID=DVlM+Bt4SiipGP6mdCpigBO33n8=-8010-19999999998"
+      title="AI 对话"
+      allow="clipboard-write; fullscreen"
+    ></iframe>
+  </main>
+  <script>
+    const shell = document.querySelector('.embed-shell');
+
+    window.addEventListener('message', (event) => {
+      const message = event.data || {};
+
+      if (message.type === 'toggleFullScreen') {
+        shell.classList.toggle('is-fullscreen', Boolean(message.isFullScreen));
+        document.body.style.padding = message.isFullScreen ? '0' : '';
+      }
+
+      if (message.type === 'closeChat') {
+        shell.classList.add('is-hidden');
+      }
+    });
+  </script>
+</body>
+</html>
